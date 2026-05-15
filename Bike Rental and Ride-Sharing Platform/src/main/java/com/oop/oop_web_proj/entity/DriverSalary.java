@@ -17,23 +17,49 @@ public class DriverSalary {
     private Double amount;
     private LocalDate date;
 
-    public DriverSalary() {}
+    public DriverSalary() {
 
-    public Long getId() { return id; }
-    public void setId(Long id) { this.id = id; }
+    }
 
-    public String getDriverName() { return driverName; }
-    public void setDriverName(String driverName) { this.driverName = driverName; }
+    public Long getId() {
+        return id;
+    }
+    public void setId(Long id) {
+        this.id = id;
+    }
 
-    public Long getRideId() { return rideId; }
-    public void setRideId(Long rideId) { this.rideId = rideId; }
+    public String getDriverName() {
+        return driverName;
+    }
+    public void setDriverName(String driverName) {
+        this.driverName = driverName;
+    }
 
-    public Double getDistance() { return distance; }
-    public void setDistance(Double distance) { this.distance = distance; }
+    public Long getRideId() {
+        return rideId;
+    }
+    public void setRideId(Long rideId) {
+        this.rideId = rideId;
+    }
 
-    public Double getAmount() { return amount; }
-    public void setAmount(Double amount) { this.amount = amount; }
+    public Double getDistance() {
+        return distance;
+    }
+    public void setDistance(Double distance) {
+        this.distance = distance;
+    }
 
-    public LocalDate getDate() { return date; }
-    public void setDate(LocalDate date) { this.date = date; }
+    public Double getAmount() {
+        return amount;
+    }
+    public void setAmount(Double amount) {
+        this.amount = amount;
+    }
+
+    public LocalDate getDate() {
+        return date;
+    }
+    public void setDate(LocalDate date) {
+        this.date = date;
+    }
 }
