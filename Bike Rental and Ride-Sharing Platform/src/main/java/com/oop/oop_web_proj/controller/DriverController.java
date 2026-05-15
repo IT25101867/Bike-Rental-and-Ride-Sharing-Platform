@@ -1,7 +1,6 @@
 package com.oop.oop_web_proj.controller;
 
 import com.oop.oop_web_proj.entity.Driver;
-import com.oop.oop_web_proj.entity.DriverSalary;
 import com.oop.oop_web_proj.repo.DriverRepository;
 import com.oop.oop_web_proj.repo.DriverSalaryRepository;
 import org.springframework.beans.factory.annotation.Autowired;
