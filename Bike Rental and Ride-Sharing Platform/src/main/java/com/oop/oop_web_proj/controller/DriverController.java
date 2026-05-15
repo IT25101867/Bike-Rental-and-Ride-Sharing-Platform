@@ -31,11 +31,13 @@ public class DriverController {
 
     @GetMapping("/all")
     public ResponseEntity<List<Driver>> getAllDrivers() {
+
         return ResponseEntity.ok(driverRepository.findAll());
     }
 
     @GetMapping("/salaries")
     public ResponseEntity<List<DriverSalary>> getAllSalaries() {
+
         return ResponseEntity.ok(driverSalaryRepository.findAll());
     }
 }
