@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>NextRide - Premium Bike & Ride Rentals</title>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+    <nav class="navbar">
+        <div class="logo">NextRide.</div>
+        <ul class="nav-links">
+            <li><a href="#home">Home</a></li>
+            <li><a href="#bikes">Our Bikes</a></li>
+            <li><a href="#rides">Rides</a></li>
+            <li id="nav-login"><a href="login.html" class="btn-secondary">Login</a></li>
+            <li id="nav-profile" style="display: none;"><a href="profile.html" class="btn-primary">My Profile</a></li>
+            <li id="nav-logout" style="display: none;"><a href="#" class="btn-secondary" onclick="logout()">Logout</a></li>
+        </ul>
+    </nav>
+
+    <header id="home" class="hero">
+        <div class="hero-content">
+            <h1>Experience the ultimate ride.</h1>
+            <p>Premium bike rentals and ride bookings with seamless management and instant availability.</p>
+            <div class="hero-buttons">
+                <a href="#bikes" class="btn-primary">Explore Bikes</a>
+                <a href="#rides" class="btn-secondary">Book a Ride</a>
+            </div>
+        </div>
+        <div class="hero-image">
+            <div class="glass-card">
+                <i class="fa-solid fa-motorcycle fa-4x"></i>
+                <h3>Fast & Reliable</h3>
+                <p>Book your next ride in seconds.</p>
+            </div>
+        </div>
+    </header>
+
+    <section id="bikes" class="section bikes-section">
+        <div class="section-header">
+            <h2>Available Bikes</h2>
+            <p>Choose from our top-tier selection of bikes.</p>
+        </div>
+        <div class="grid-container" id="bike-list">
+            <!-- Bikes will be loaded here via JS -->
+            <div class="loading">Loading bikes from server...</div>
+        </div>
+    </section>
+
+    <section id="rides" class="section rides-section dark-bg">
+        <div class="section-header">
+            <h2>Book a Ride</h2>
+            <p>Need to get somewhere? Find available rides and drivers.</p>
+        </div>
+        <div class="booking-container glass-panel">
+            <form id="ride-booking-form">
+                <div class="input-group">
+                    <label>Start Location</label>
+                    <input type="text" id="start-location" required placeholder="e.g. Colombo">
+                </div>
+                <div class="input-group">
+                    <label>Destination</label>
+                    <input type="text" id="end-location" required placeholder="e.g. Kandy">
+                </div>
+                <div class="input-group">
+                    <label>Date</label>
+                    <input type="date" id="ride-date" required>
+                </div>
+                <div class="input-group">
+                    <label>Time</label>
+                    <input type="time" id="ride-time" required>
+                </div>
+                <div class="input-group">
+                    <label>Vehicle Type</label>
+                    <select id="ride-vehicle-type" required>
+                        <option value="" disabled selected>Select Vehicle Type</option>
+                        <option value="Bike">Bike</option>
+                        <option value="Threewheel">Threewheel</option>
+                        <option value="Car">Car</option>
+                        <option value="Van">Van</option>
+                    </select>
+                </div>
+                <button type="submit" class="btn-primary full-width">Check Availability & Book</button>
+            </form>
+            <div id="booking-status" class="status-msg"></div>
+        </div>
+    </section>
+
+    <footer>
+        <div class="footer-content">
+            <h2>NextRide.</h2>
+            <p>Group Project - Bike & Ride Management System</p>
+        </div>
+    </footer>
+
+    <script src="js/main.js"></script>
+</body>
+</html>

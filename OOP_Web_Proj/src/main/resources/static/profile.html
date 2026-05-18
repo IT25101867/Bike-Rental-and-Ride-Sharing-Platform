@@ -1,0 +1,204 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>My Profile - NextRide</title>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        .profile-container {
+            width: 100%;
+            max-width: 600px;
+            margin: 5rem auto;
+            padding: 2.5rem;
+        }
+        .profile-header {
+            text-align: center;
+            margin-bottom: 2rem;
+            border-bottom: 1px solid rgba(255,255,255,0.1);
+            padding-bottom: 1.5rem;
+        }
+        .profile-header h2 {
+            margin-top: 10px;
+            font-weight: 600;
+        }
+        .profile-detail {
+            display: flex;
+            justify-content: space-between;
+            padding: 1rem 0;
+            border-bottom: 1px solid rgba(255,255,255,0.05);
+        }
+        .profile-detail span.label {
+            color: var(--text-muted);
+            font-weight: 600;
+        }
+        .profile-detail span.value {
+            color: var(--text);
+            font-weight: 400;
+        }
+        .history-section {
+            margin-top: 2rem;
+            padding-top: 1.5rem;
+            border-top: 1px solid rgba(255,255,255,0.1);
+        }
+        .history-section h3 {
+            margin-bottom: 1rem;
+            color: var(--primary);
+        }
+        .history-list {
+            list-style: none;
+            padding: 0;
+        }
+        .history-list li {
+            background: rgba(0,0,0,0.2);
+            padding: 1rem;
+            border-radius: 8px;
+            margin-bottom: 0.5rem;
+            display: flex;
+            justify-content: space-between;
+        }
+        .quick-links {
+            display: flex;
+            gap: 10px;
+            margin-top: 1rem;
+            justify-content: center;
+        }
+    </style>
+</head>
+<body class="dark-bg">
+
+    <nav class="navbar">
+        <div class="logo">NextRide.</div>
+        <ul class="nav-links">
+            <li><a href="index.html">Home</a></li>
+            <li><a href="#" class="btn-secondary" onclick="logout()">Logout</a></li>
+        </ul>
+    </nav>
+
+    <div class="glass-panel profile-container">
+        <div class="profile-header">
+            <i class="fa-solid fa-user-circle fa-4x" style="color: var(--primary);"></i>
+            <h2 id="display-name">My Profile</h2>
+            <div class="quick-links">
+                <a href="index.html#rides" class="btn btn-primary" style="text-decoration:none; padding:8px 15px;">Book a New Ride</a>
+                <a href="index.html#bikes" class="btn btn-secondary" style="text-decoration:none; padding:8px 15px;">Rent a Bike</a>
+            </div>
+        </div>
+
+        <div id="warning-container"></div>
+
+        <div id="profile-content">
+            <div style="text-align:center;">
+                <i class="fa-solid fa-spinner fa-spin fa-2x"></i>
+                <p>Loading profile details...</p>
+            </div>
+        </div>
+
+        <div id="history-content" class="history-section" style="display: none;">
+            <h3>Ride History</h3>
+            <ul class="history-list" id="ride-history-list"></ul>
+            
+            <h3 style="margin-top:2rem;">Rental History</h3>
+            <ul class="history-list" id="rental-history-list"></ul>
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', async () => {
+            const userEmail = localStorage.getItem('userEmail');
+            if (!userEmail) {
+                alert('You are not logged in!');
+                window.location.href = 'login.html';
+                return;
+            }
+
+            const profileContent = document.getElementById('profile-content');
+            
+            try {
+                const response = await fetch('/api/auth/profile/' + encodeURIComponent(userEmail));
+                if (response.ok) {
+                    const user = await response.json();
+                    document.getElementById('display-name').innerText = user.name || 'My Profile';
+                    
+                    profileContent.innerHTML = `
+                        <div class="profile-detail"><span class="label">Email</span><span class="value">${user.email}</span></div>
+                        <div class="profile-detail"><span class="label">Phone</span><span class="value">${user.phone || '-'}</span></div>
+                        <div class="profile-detail"><span class="label">Address</span><span class="value">${user.address || '-'}</span></div>
+                        <div class="profile-detail"><span class="label">NIC Number</span><span class="value">${user.nicNum || '-'}</span></div>
+                        <div class="profile-detail"><span class="label">License Number</span><span class="value">${user.licenseNum || '-'}</span></div>
+                    `;
+
+                    // Fetch History
+                    fetchHistory(userEmail);
+
+                } else {
+                    profileContent.innerHTML = `<p class="error" style="text-align:center;">Could not load profile. Please try logging in again.</p>`;
+                }
+            } catch (err) {
+                profileContent.innerHTML = `<p class="error" style="text-align:center;">Server error. Please try again later.</p>`;
+            }
+        });
+
+        function logout() {
+            localStorage.removeItem('userEmail');
+            window.location.href = 'index.html';
+        }
+
+        async function fetchHistory(email) {
+            try {
+                const res = await fetch('/api/bookings/history/' + encodeURIComponent(email));
+                if (res.ok) {
+                    const data = await res.json();
+                    document.getElementById('history-content').style.display = 'block';
+
+                    const rideList = document.getElementById('ride-history-list');
+                    if (data.rides && data.rides.length > 0) {
+                        rideList.innerHTML = data.rides.map(r => `<li><div><strong>${r.startLocation} &rarr; ${r.endLocation}</strong><br><small>${r.rideDate || '-'} ${r.rideTime || ''}</small></div><span class="status-available" style="color:var(--primary)">${r.status}</span></li>`).join('');
+                    } else {
+                        rideList.innerHTML = '<li>No rides booked yet.</li>';
+                    }
+
+                    const rentalList = document.getElementById('rental-history-list');
+                    if (data.rentals && data.rentals.length > 0) {
+                        let warnings = '';
+                        rentalList.innerHTML = data.rentals.map(r => {
+                            let returnInfo = r.returnTime ? `<br><small style="color:#f59e0b">Return by: ${new Date(r.returnTime).toLocaleString()}</small>` : '';
+                            
+                            // Warning logic
+                            if (r.status === 'Active' && r.returnTime) {
+                                const returnDate = new Date(r.returnTime);
+                                const now = new Date();
+                                const diffHours = (returnDate - now) / (1000 * 60 * 60);
+                                
+                                if (diffHours > 0 && diffHours <= 24) {
+                                    warnings += `<div style="background:#fef2f2; color:#b91c1c; padding:15px; border-radius:8px; margin-bottom:15px; border-left:4px solid #ef4444; text-align: left;">
+                                        <strong><i class="fa-solid fa-triangle-exclamation"></i> Action Required:</strong><br>
+                                        Your rented bike <b>${r.bikeModel}</b> is due for return soon (${returnDate.toLocaleString()}). Please hand it over on time.
+                                    </div>`;
+                                } else if (diffHours <= 0) {
+                                    warnings += `<div style="background:#fef2f2; color:#b91c1c; padding:15px; border-radius:8px; margin-bottom:15px; border-left:4px solid #ef4444; text-align: left;">
+                                        <strong><i class="fa-solid fa-circle-exclamation"></i> OVERDUE:</strong><br>
+                                        Your rented bike <b>${r.bikeModel}</b> is past its return time (${returnDate.toLocaleString()})! Please hand it over immediately.
+                                    </div>`;
+                                }
+                            }
+                            
+                            const statusColor = r.status === 'Completed' ? 'var(--primary)' : '#ef4444';
+                            const displayModel = r.bikeModel ? r.bikeModel : 'Bike';
+                            return `<li><div><strong>${displayModel} Rent (${r.bikeId})</strong><br><small>Rented: ${r.rentalDate || '-'}</small>${returnInfo}</div><span class="status-available" style="color:${statusColor}; font-weight: bold;">${r.status}</span></li>`;
+                        }).join('');
+                        
+                        document.getElementById('warning-container').innerHTML = warnings;
+                    } else {
+                        rentalList.innerHTML = '<li>No bikes rented yet.</li>';
+                    }
+                }
+            } catch (err) {
+                console.error("Failed to load history", err);
+            }
+        }
+    </script>
+</body>
+</html>

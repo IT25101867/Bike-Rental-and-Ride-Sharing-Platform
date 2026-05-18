@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Register - NextRide</title>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body class="dark-bg" style="display:flex; justify-content:center; align-items:center; min-height:100vh;">
+
+    <div class="glass-panel" style="width: 100%; max-width: 500px; padding: 2.5rem; margin: 2rem 0;">
+        <div style="text-align:center; margin-bottom: 2rem;">
+            <a href="index.html" class="logo" style="text-decoration:none; font-size: 2.5rem;">NextRide.</a>
+            <h2 style="margin-top: 10px; font-weight:400;">Create an Account</h2>
+        </div>
+
+        <form id="register-form">
+            <div class="input-group">
+                <label>Full Name</label>
+                <input type="text" id="r-name" required placeholder="Enter your full name">
+            </div>
+            <div class="input-group">
+                <label>Email Address</label>
+                <input type="email" id="r-email" required placeholder="Enter your email">
+            </div>
+            <div class="input-group">
+                <label>Phone Number</label>
+                <input type="text" id="r-phone" required placeholder="Enter your phone number">
+            </div>
+            <div class="input-group">
+                <label>Address</label>
+                <input type="text" id="r-address" placeholder="Enter your address">
+            </div>
+            <div class="input-group">
+                <label>NIC Number</label>
+                <input type="text" id="r-nic" placeholder="Enter your NIC number">
+            </div>
+            <div class="input-group">
+                <label>License Number</label>
+                <input type="text" id="r-license" placeholder="Enter your driving license number">
+            </div>
+            <div class="input-group">
+                <label>Password</label>
+                <input type="password" id="r-password" required placeholder="Create a strong password">
+            </div>
+            <button type="submit" class="btn-primary full-width" id="btn-register" style="margin-top:10px;">Register Account</button>
+        </form>
+        
+        <div id="register-status" class="status-msg"></div>
+
+        <p style="text-align:center; margin-top: 1.5rem; color:var(--text-muted);">
+            Already have an account? <a href="login.html" style="color:var(--primary); text-decoration:none;">Login here</a>
+        </p>
+    </div>
+
+    <script src="js/auth.js"></script>
+</body>
+</html>

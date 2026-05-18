@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login - NextRide</title>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body class="dark-bg" style="display:flex; justify-content:center; align-items:center; min-height:100vh;">
+
+    <div class="glass-panel" style="width: 100%; max-width: 400px; padding: 2.5rem;">
+        <div style="text-align:center; margin-bottom: 1.5rem;">
+            <a href="index.html" class="logo" style="text-decoration:none; font-size: 2.5rem;">NextRide.</a>
+            <h2 style="margin-top: 10px; font-weight:400;">Welcome Back</h2>
+        </div>
+
+        <div style="display:flex; justify-content:space-between; margin-bottom: 1.5rem; border-bottom: 1px solid rgba(255,255,255,0.1);">
+            <button type="button" id="tab-user" class="login-tab active" style="flex:1; background:transparent; border:none; color:var(--text); padding:10px; font-weight:600; cursor:pointer; border-bottom: 2px solid var(--primary); transition: all 0.3s;">User Login</button>
+            <button type="button" id="tab-admin" class="login-tab" style="flex:1; background:transparent; border:none; color:var(--text-muted); padding:10px; font-weight:600; cursor:pointer; border-bottom: 2px solid transparent; transition: all 0.3s;">Admin Login</button>
+            <button type="button" id="tab-driver" class="login-tab" style="flex:1; background:transparent; border:none; color:var(--text-muted); padding:10px; font-weight:600; cursor:pointer; border-bottom: 2px solid transparent; transition: all 0.3s;">Driver Login</button>
+        </div>
+
+        <form id="login-form">
+            <div class="input-group">
+                <label>Email Address</label>
+                <input type="email" id="l-email" required placeholder="Enter your email">
+            </div>
+            <div class="input-group">
+                <label>Password</label>
+                <input type="password" id="l-password" required placeholder="Enter your password">
+            </div>
+            <button type="submit" class="btn-primary full-width" id="btn-login" style="margin-top:10px;">Login to Account</button>
+        </form>
+        
+        <div id="login-status" class="status-msg"></div>
+
+        <p style="text-align:center; margin-top: 1.5rem; color:var(--text-muted);">
+            Don't have an account? <a href="register.html" style="color:var(--primary); text-decoration:none;">Register here</a>
+        </p>
+    </div>
+
+    <script src="js/auth.js"></script>
+</body>
+</html>
