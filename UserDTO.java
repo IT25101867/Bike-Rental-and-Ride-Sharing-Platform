@@ -1,6 +1,7 @@
 package com.oop.oop_web_proj.dto;
 
 public class UserDTO {
+    //Attributes
     private Long id;
     private String name;
     private String email;
@@ -16,6 +17,7 @@ public class UserDTO {
     public Long getId() { return id; }
     public void setId(Long id) { this.id = id; }
 
+    //Setters & Getters
     public String getName() { return name; }
     public void setName(String name) { this.name = name; }
     public String getEmail() { return email; }
