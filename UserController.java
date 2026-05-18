@@ -11,14 +11,14 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping("/api/auth")
+@RequestMapping("/api/auth")//This is the main ,general mapping annotation
 @CrossOrigin(origins = "*")
 public class UserController {
 
-    @Autowired
+    @Autowired//automatic dependency injection
     private UserService userService;
 
-    @PostMapping("/register")
+    @PostMapping("/register")//use for create data
     public ResponseEntity<String> register(@RequestBody UserDTO userDto) {
         String result = userService.registerUser(userDto);
         if (result.equals("User Registration Successful")) {
@@ -38,7 +38,7 @@ public class UserController {
         }
     }
 
-    @GetMapping("/profile/{email}")
+    @GetMapping("/profile/{email}")//use for fetch data
     public ResponseEntity<UserDTO> getProfile(@PathVariable String email) {
         UserDTO user = userService.getUserProfile(email);
         if (user != null) {
@@ -53,7 +53,7 @@ public class UserController {
         return ResponseEntity.ok(userService.getAllUsers());
     }
 
-    @DeleteMapping("/users/{id}")
+    @DeleteMapping("/users/{id}")//use for delete data
     public ResponseEntity<String> deleteUser(@PathVariable Long id) {
         boolean deleted = userService.deleteUser(id);
         if (deleted) {
@@ -73,7 +73,8 @@ public class UserController {
         }
     }
 
-    @PutMapping("/users/{id}")
+
+    @PutMapping("/users/{id}")//use for update data
     public ResponseEntity<UserDTO> updateUser(@PathVariable Long id, @RequestBody UserDTO userDto) {
         UserDTO updatedUser = userService.updateUser(id, userDto);
         if (updatedUser != null) {
