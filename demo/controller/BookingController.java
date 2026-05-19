@@ -40,6 +40,23 @@ public class BookingController {
         return ResponseEntity.ok(bookingService.getAllRentals());
     }
 
+    @DeleteMapping("/rentals/{id}")
+    public ResponseEntity<?> deleteRental(@PathVariable Long id) {
+        if (bookingService.deleteRental(id)) {
+            return ResponseEntity.ok().build();
+        }
+        return ResponseEntity.notFound().build();
+    }
+
+    @PutMapping("/rentals/{id}")
+    public ResponseEntity<BikeRentalDto> updateRental(@PathVariable Long id, @RequestBody BikeRentalDto rentalDto) {
+        BikeRentalDto updated = bookingService.updateRental(id, rentalDto);
+        if (updated != null) {
+            return ResponseEntity.ok(updated);
+        }
+        return ResponseEntity.notFound().build();
+    }
+
     @PostMapping("/schedule-handover/{rentalId}")
     public ResponseEntity<BikeRentalDto> scheduleHandover(@PathVariable Long rentalId, @RequestParam String returnTime) {
         BikeRentalDto dto = bookingService.scheduleHandover(rentalId, LocalDateTime.parse(returnTime));
@@ -63,6 +80,25 @@ public class BookingController {
         RideBookingDto result = bookingService.acceptRide(id, driverName);
         if (result != null) return ResponseEntity.ok(result);
         return ResponseEntity.notFound().build();
+    }
+
+    @PostMapping("/start-ride/{id}")
+    public ResponseEntity<RideBookingDto> startRide(@PathVariable Long id) {
+        RideBookingDto result = bookingService.startRide(id);
+        if (result != null) return ResponseEntity.ok(result);
+        return ResponseEntity.notFound().build();
+    }
+
+    @PostMapping("/decline-ride/{id}")
+    public ResponseEntity<RideBookingDto> declineRide(@PathVariable Long id) {
+        RideBookingDto result = bookingService.declineRide(id);
+        if (result != null) return ResponseEntity.ok(result);
+        return ResponseEntity.notFound().build();
+    }
+
+    @GetMapping("/driver-rides/{driverName}")
+    public ResponseEntity<java.util.List<RideBookingDto>> getDriverRides(@PathVariable String driverName) {
+        return ResponseEntity.ok(bookingService.getDriverRides(driverName));
     }
 
     @PostMapping("/complete-ride/{id}")

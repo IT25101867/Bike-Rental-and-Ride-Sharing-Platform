@@ -62,6 +62,11 @@ public class BookingService {
                 bikeRepository.findById(bId).ifPresent(bike -> {
                     bike.setStatus("Rented");
                     bikeRepository.save(bike);
+                    
+                    if (saved.getBikeModel() == null || saved.getBikeModel().isEmpty()) {
+                        saved.setBikeModel(bike.getModel());
+                        bikeRentalRepository.save(saved);
+                    }
 
                     // Auto-generate Payment
                     if (rentalDto.getDays() != null && rentalDto.getDays() > 0 && bike.getPrice() != null) {
@@ -78,6 +83,37 @@ public class BookingService {
         }
         
         return modelMapper.map(saved, BikeRentalDto.class);
+    }
+
+    public boolean deleteRental(Long id) {
+        if (bikeRentalRepository.existsById(id)) {
+            bikeRentalRepository.deleteById(id);
+            return true;
+        }
+        return false;
+    }
+
+    public BikeRentalDto updateRental(Long id, BikeRentalDto rentalDto) {
+        Optional<BikeRental> rentalOpt = bikeRentalRepository.findById(id);
+        if (rentalOpt.isPresent()) {
+            BikeRental existing = rentalOpt.get();
+            if (rentalDto.getUserEmail() != null) existing.setUserEmail(rentalDto.getUserEmail());
+            if (rentalDto.getBikeId() != null) {
+                existing.setBikeId(rentalDto.getBikeId());
+                try {
+                    Long bId = Long.parseLong(rentalDto.getBikeId());
+                    bikeRepository.findById(bId).ifPresent(bike -> {
+                        existing.setBikeModel(bike.getModel());
+                    });
+                } catch (NumberFormatException ignored) {}
+            } else if (rentalDto.getBikeModel() != null) {
+                existing.setBikeModel(rentalDto.getBikeModel());
+            }
+            if (rentalDto.getStatus() != null) existing.setStatus(rentalDto.getStatus());
+            BikeRental saved = bikeRentalRepository.save(existing);
+            return modelMapper.map(saved, BikeRentalDto.class);
+        }
+        return null;
     }
 
     public RideBookingDto bookRide(RideBookingDto rideDto) {
@@ -101,10 +137,45 @@ public class BookingService {
         if (opt.isPresent()) {
             RideBooking ride = opt.get();
             ride.setDriverName(driverName);
+            ride.setStatus("Assigned");
+            return modelMapper.map(rideBookingRepository.save(ride), RideBookingDto.class);
+        }
+        return null;
+    }
+
+    public RideBookingDto startRide(Long id) {
+        Optional<RideBooking> opt = rideBookingRepository.findById(id);
+        if (opt.isPresent()) {
+            RideBooking ride = opt.get();
             ride.setStatus("Accepted");
             return modelMapper.map(rideBookingRepository.save(ride), RideBookingDto.class);
         }
         return null;
+    }
+
+    public RideBookingDto declineRide(Long id) {
+        Optional<RideBooking> opt = rideBookingRepository.findById(id);
+        if (opt.isPresent()) {
+            RideBooking ride = opt.get();
+            ride.setStatus("Pending");
+            ride.setDriverName(null);
+            return modelMapper.map(rideBookingRepository.save(ride), RideBookingDto.class);
+        }
+        return null;
+    }
+
+    public List<RideBookingDto> getDriverRides(String driverName) {
+        return rideBookingRepository.findByDriverName(driverName).stream()
+                .map(r -> {
+                    RideBookingDto dto = modelMapper.map(r, RideBookingDto.class);
+                    if ("Completed".equals(r.getStatus())) {
+                        driverSalaryRepository.findByRideId(r.getId()).ifPresent(salary -> {
+                            dto.setAmount(salary.getAmount());
+                        });
+                    }
+                    return dto;
+                })
+                .collect(Collectors.toList());
     }
 
     public RideBookingDto completeRide(Long id) {
